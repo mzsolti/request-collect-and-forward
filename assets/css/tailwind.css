@@ -1,0 +1,52 @@
+@layer tailwind-base {
+  @tailwind base;
+}
+@layer base {
+  img {
+    @apply inline-block;
+  }
+}
+
+@layer tailwind-utilities {
+  @tailwind utilities;
+  @tailwind variants;
+}
+:root {
+  --table-row-odd: #eee;
+  --table-row-even: #fff;
+  --table-head-row: #666;
+  --table-first-col: #369;
+  --table-border-color: #888;
+}
+
+tr.table-row:nth-child(odd) {
+  background-color: var(--table-row-odd);
+}
+tr.table-row:nth-child(even) {
+  background-color: var(--table-row-even);
+}
+.table-head-row {
+  background-color: var(--table-head-row);
+}
+.table-first-col {
+  background-color: var(--table-first-col);
+  color: #fff;
+}
+.with-borders .table-row td,
+.with-borders .table-head-row th,
+.t-bordered {
+  border-width: 1px;
+  border-color: var(--table-border-color);
+}
+.border-t-0.t-bordered {
+  border-top: none !important;
+}
+.border-r-0.t-bordered {
+  border-right: none !important;
+}
+.border-l-0.t-bordered {
+  border-left: none !important;
+}
+.border-b-0.t-bordered {
+  border-bottom: none !important;
+}
