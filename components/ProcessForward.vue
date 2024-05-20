@@ -44,7 +44,9 @@ defineExpose({
           </tr>
           <tr>
             <td class="font-bold text-nowrap align-top">Response body :</td>
-            <td class="px-2 break-all">{{ httpResponse.response }}</td>
+            <td class="px-2 break-all">
+              <div v-html="httpResponse.response"></div>
+            </td>
           </tr>
         </tbody>
       </table>

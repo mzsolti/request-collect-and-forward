@@ -1,12 +1,25 @@
 <script setup lang="ts">
 import Paginator from "primevue/paginator";
 import InputText from "primevue/inputtext";
+import OverlayPanel from "primevue/overlaypanel";
+import Checkbox from "primevue/checkbox";
+
 const store = useRequestsStore();
 const toast = useToast();
 const query = ref("");
+const settings = ref(null);
 const processForwardRef = ref(null);
-
-await store.getRequests();
+const showSettings = (event) => {
+  settings.value.toggle(event);
+};
+const applySettings = async (event) => {
+  settings.value.toggle(event);
+  loadRequests();
+};
+const loadRequests = async () => {
+  await store.getRequests();
+};
+loadRequests();
 const filterEvent = async (event, type) => {
   if (type == "page") {
     store.searchRequest.page = event.page + 1;
@@ -17,16 +30,57 @@ const filterEvent = async (event, type) => {
 </script>
 <template>
   <MainContent title="Requests">
-    <template #title-right> </template>
-    <div
-      class="card flex flex-wrap items-center justify-center bg-white w-full p-2 mb-3"
-    >
-      <InputText
-        v-model="store.externalRequestLog"
-        placeholder="External request log url"
-        class="w-full"
-      />
-    </div>
+    <template #title-right>
+      <div class="flex gap-1">
+        <Button
+          type="button"
+          icon="pi pi-sync"
+          severity="info"
+          @click="loadRequests"
+        />
+        <Button
+          type="button"
+          icon="pi pi-cog"
+          label="Settings"
+          severity="contrast"
+          @click="showSettings"
+        />
+      </div>
+      <OverlayPanel ref="settings" class="w-3/4 md:w-1/2">
+        <div>
+          <Checkbox
+            v-model="store.loadFromExternalRequestLog"
+            inputId="oad_from_external_source"
+            :binary="true"
+            class="me-2"
+            value="1"
+          />
+          <label for="oad_from_external_source"
+            >Load from external source</label
+          >
+        </div>
+        <div class="flex gap-3 w-full" v-if="store.loadFromExternalRequestLog">
+          <div class="w-full">
+            <span class="font-medium text-900 block mb-2"
+              >External request log url</span
+            >
+            <InputText
+              v-model="store.externalRequestLog"
+              placeholder="External request log url"
+              class="w-full"
+            />
+          </div>
+        </div>
+        <div class="flex gap-3 w-full mt-2 justify-center">
+          <Button
+            type="button"
+            label="Apply"
+            severity="ok"
+            @click="applySettings"
+          />
+        </div>
+      </OverlayPanel>
+    </template>
     <div
       class="card flex flex-wrap items-center justify-center bg-white w-full p-2 mb-3"
     >

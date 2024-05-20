@@ -15,7 +15,7 @@ if (isset($_GET) && count($_GET) > 0) {
         http_build_query($_GET)
     ];
 }
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ((!isset($_POST) || count($_POST) == 0) && $_SERVER['REQUEST_METHOD'] == 'POST' || $_SERVER['REQUEST_METHOD'] == 'PUT') {
     $input = file_get_contents('php://input');
     $data[] = [
         date('Y-m-d H:i:s'),

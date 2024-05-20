@@ -17,19 +17,18 @@ export const useRequestsStore = defineStore("requestStore", {
   actions: {
     async getRequests() {
       const runtimeConfig = useRuntimeConfig();
-      const { data, error } = await useAsyncData(
-        "requests_" + this.requestsKey,
-        async () => {
-          return await $fetch<IRequest[]>(runtimeConfig.public.API_ENDPOINT, {
-            method: "GET",
-            body: {
-              loadFromExternalRequestLog: this.loadFromExternalRequestLog,
-              externalRequestLog: this.externalRequestLog,
-            },
-          });
+      let data = await $fetch<IRequest[]>(runtimeConfig.public.API_ENDPOINT, {
+        method: "POST",
+        body: {
+          loadFromExternalRequestLog: this.loadFromExternalRequestLog,
+          externalRequestLog: this.externalRequestLog,
         },
-      );
-      this.requests = data.value;
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+        },
+      });
+      this.requests = data;
+      this.requestsKey += 1;
     },
     async doForward(l_request: IRequest) {
       console.log(this.forwardUrl, l_request);

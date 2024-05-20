@@ -32,7 +32,7 @@ if ($action == "send") {
     // avoid following redirects, if any
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
     //we want header data
-    curl_setopt($ch, CURLOPT_HEADER, true);
+    //curl_setopt($ch, CURLOPT_HEADER, true);
     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     if ($req['type'] == 'GET') {
@@ -71,6 +71,13 @@ if ($action == "send") {
     curl_close($ch);
 } else {
     $file = 'request.log';
+    if (isset($_POST['loadFromExternalRequestLog']) && $_POST['loadFromExternalRequestLog'] == true) {
+        if (ini_get('allow_url_fopen')) {
+            $file = $_POST['externalRequestLog'];
+        } else {
+            file_put_contents('request.log', file_get_contents($_POST['externalRequestLog']));
+        }
+    }
     $data = [];
     $row = 0;
     if (($handle = fopen($file, "r")) !== false) {
