@@ -22,6 +22,15 @@ const filterEvent = async (event, type) => {
       class="card flex flex-wrap items-center justify-center bg-white w-full p-2 mb-3"
     >
       <InputText
+        v-model="store.externalRequestLog"
+        placeholder="External request log url"
+        class="w-full"
+      />
+    </div>
+    <div
+      class="card flex flex-wrap items-center justify-center bg-white w-full p-2 mb-3"
+    >
+      <InputText
         v-model="store.forwardUrl"
         placeholder="Forward url"
         class="w-full"
@@ -64,7 +73,7 @@ const filterEvent = async (event, type) => {
     ></Paginator>
     <MainEmptyList
       emptyText="No request found"
-      v-if="store.requests.length == 0"
+      v-if="(store?.requests?.length ?? 0) == 0"
     >
     </MainEmptyList>
     <ProcessForward ref="processForwardRef" />

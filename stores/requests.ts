@@ -9,9 +9,10 @@ export const useRequestsStore = defineStore("requestStore", {
       total: 0,
       q: "",
     },
-    forwardUrl:
-      "https://www.server.intranet/work/jobboards/wadhefa.com/dev/request.php",
+    forwardUrl: "",
     requestsKey: 0,
+    loadFromExternalRequestLog: false,
+    externalRequestLog: "",
   }),
   actions: {
     async getRequests() {
@@ -19,7 +20,13 @@ export const useRequestsStore = defineStore("requestStore", {
       const { data, error } = await useAsyncData(
         "requests_" + this.requestsKey,
         async () => {
-          return await $fetch<IRequest[]>(runtimeConfig.public.API_ENDPOINT);
+          return await $fetch<IRequest[]>(runtimeConfig.public.API_ENDPOINT, {
+            method: "GET",
+            body: {
+              loadFromExternalRequestLog: this.loadFromExternalRequestLog,
+              externalRequestLog: this.externalRequestLog,
+            },
+          });
         },
       );
       this.requests = data.value;
