@@ -100,6 +100,7 @@ const filterEvent = async (event, type) => {
       </div>
       <div class="w-1/6 md:w-1/12 p-1">
         {{ request.type }}
+        {{ request.sent }}
       </div>
       <div class="w-3/6 md:w-9/12 p-1">
         <div class="flex flex-wrap break-all">{{ request.params }}</div>

@@ -27,7 +27,8 @@ export const useRequestsStore = defineStore("requestStore", {
           "X-Requested-With": "XMLHttpRequest",
         },
       });
-      this.requests = data;
+      // this.requests = [this.requests, ...data];
+      this.requests = [...new Set([...this.requests, ...data])];
       this.requestsKey += 1;
     },
     async doForward(l_request: IRequest) {
@@ -49,6 +50,7 @@ export const useRequestsStore = defineStore("requestStore", {
           });
         },
       );
+      l_request.sent = true;
       return data.value;
     },
   },

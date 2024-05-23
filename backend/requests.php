@@ -83,14 +83,17 @@ if ($action == "send") {
     if (($handle = fopen($file, "r")) !== false) {
         while (($line = fgetcsv($handle, 10000, ",")) !== false) {
             $data[$row] = [
+                'id' => $row,
                 'created' => $line[0],
                 'type' => $line[1],
                 'params' => $line[2],
+                'sent' => false,
             ];
             $row++;
         }
         fclose($handle);
     }
+    $data = array_reverse($data);
 }
 header('Content-type: application/json');
 echo json_encode($data);
