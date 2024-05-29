@@ -11,10 +11,6 @@ export default defineNuxtConfig({
     },
     options: {
       ripple: true,
-      locale: {
-        emptyMessage: "Nu sunt articole in listă",
-        emptySearchMessage: "Nu am găsit rezultate pentru această căutare",
-      },
     },
   },
   css: [
@@ -22,7 +18,7 @@ export default defineNuxtConfig({
     "primeicons/primeicons.css",
   ],
   tailwindcss: {
-    cssPath: ["~/assets/css/tailwind.css", { injectionPosition: "first" }],
+    cssPath: ["~/assets/css/tailwind.css", { injectPosition: "first" }],
   },
   runtimeConfig: {
     public: {
@@ -31,5 +27,8 @@ export default defineNuxtConfig({
           ? process.env.API_ENDPOINT
           : "http://localhost/work/request-collect-and-forward/backend/requests.php",
     },
+  },
+  typescript: {
+    typeCheck: true,
   },
 });

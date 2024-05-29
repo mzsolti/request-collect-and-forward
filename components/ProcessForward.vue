@@ -2,26 +2,28 @@
 import { ref } from "vue";
 import InputText from "primevue/inputtext";
 import Dropdown from "primevue/dropdown";
+import { type IRequest } from "~~/types";
 const store = useRequestsStore();
-const httpRequest = ref([]);
+const httpRequest = ref<IRequest>();
 const showDialog = ref(false);
 const emit = defineEmits(["on-close-dialog"]);
-const closeDialog = (success) => {
+const closeDialog = (success: boolean) => {
   showDialog.value = false;
   emit("on-close-dialog", success);
 };
 const sent = ref(false);
-const httpResponse = ref("");
-const openDialog = async (l_request) => {
+const httpResponse = ref({ status: "", response: "" });
+const openDialog = async (l_request: IRequest) => {
   showDialog.value = true;
   httpRequest.value = l_request;
   sent.value = false;
-  httpResponse.value = "";
+  httpResponse.value = { status: "", response: "" };
 };
 const sendRequest = async () => {
-  console.log("Send Request", httpRequest.value);
-  httpResponse.value = await store.doForward(httpRequest.value);
-  sent.value = true;
+  if (httpRequest.value != undefined) {
+    httpResponse.value = await store.doForward(httpRequest.value);
+    sent.value = true;
+  }
 };
 defineExpose({
   openDialog,
@@ -33,19 +35,19 @@ defineExpose({
     modal
     header="Send Request"
     :style="{ width: '75vw' }"
-    @update:visible="closeDialog(null)"
+    @update:visible="closeDialog(false)"
   >
     <div v-if="sent">
       <table class="table-auto w-full">
         <tbody>
           <tr>
             <td class="font-bold align-top">Status :</td>
-            <td class="px-2">{{ httpResponse.status }}</td>
+            <td class="px-2">{{ httpResponse?.status }}</td>
           </tr>
           <tr>
             <td class="font-bold text-nowrap align-top">Response body :</td>
             <td class="px-2 break-all">
-              <div v-html="httpResponse.response"></div>
+              <div v-html="httpResponse?.response"></div>
             </td>
           </tr>
         </tbody>
@@ -56,15 +58,15 @@ defineExpose({
         <tbody>
           <tr>
             <td class="font-bold align-top">Created :</td>
-            <td class="px-2">{{ httpRequest.created }}</td>
+            <td class="px-2">{{ httpRequest?.created }}</td>
           </tr>
           <tr>
             <td class="font-bold align-top">Request type :</td>
-            <td class="px-2">{{ httpRequest.type }}</td>
+            <td class="px-2">{{ httpRequest?.type }}</td>
           </tr>
           <tr>
             <td class="font-bold text-nowrap align-top">Request params :</td>
-            <td class="px-2 break-all">{{ httpRequest.params }}</td>
+            <td class="px-2 break-all">{{ httpRequest?.params }}</td>
           </tr>
         </tbody>
       </table>
